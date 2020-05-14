@@ -53,7 +53,7 @@ func GetRegisterCmd(cdc *codec.Codec) *cobra.Command {
 
 func GetDelegateCmd(cdc *codec.Codec) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "delagate [validator-addr] [amount]",
+		Use:  "delegate [validator-addr] [amount]",
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
