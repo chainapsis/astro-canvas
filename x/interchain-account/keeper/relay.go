@@ -68,9 +68,7 @@ func (k Keeper) CreateAccount(ctx sdk.Context, address sdk.AccAddress, identifie
 
 // Determine account's address that will be created.
 func (k Keeper) GenerateAddress(identifier string, salt string) ([]byte, error) {
-	hash := tmhash.NewTruncated()
-	hashsum := hash.Sum([]byte(identifier + salt))
-	return hashsum, nil
+	return tmhash.SumTruncated([]byte(identifier + salt)), nil
 }
 
 func (k Keeper) CreateInterchainAccount(ctx sdk.Context, sourcePort, sourceChannel, salt string) error {

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -74,7 +75,7 @@ func (keeper Keeper) RegisterInterchainAccount(ctx sdk.Context, sender sdk.AccAd
 	r := rand.New(rand.NewSource(ctx.BlockHeight()))
 
 	randInt := r.Int63()
-	salt := strconv.FormatInt(randInt, 10)
+	salt := strconv.FormatInt(randInt, 10) + hex.EncodeToString(ctx.TxBytes())
 	err := keeper.interchainAccountKeeper.CreateInterchainAccount(ctx, sourcePort, sourceChannel, salt)
 	if err != nil {
 		return err
@@ -94,7 +95,9 @@ func (keeper Keeper) RegisterInterchainAccount(ctx sdk.Context, sender sdk.AccAd
 	}
 	prefixStore.Set(key, address)
 
-	ctx.EventManager().EmitEvent(sdk.NewEvent("register-interchain-account", sdk.NewAttribute("expected-address", sdk.AccAddress(address).String())))
+	ctx.EventManager().EmitEvent(sdk.NewEvent("register-interchain-account",
+		sdk.NewAttribute("expected-address", sdk.AccAddress(address).String()),
+		sdk.NewAttribute("salt", salt)))
 
 	return nil
 }

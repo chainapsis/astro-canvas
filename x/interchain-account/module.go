@@ -268,6 +268,8 @@ func (am AppModule) OnRecvPacket(
 			acknowledgement = RunTxPacketAcknowledgement{
 				Code: 1,
 			}
+
+			ctx.EventManager().EmitEvent(sdk.NewEvent("interchain_account_tx_failed", sdk.NewAttribute("error", err.Error())))
 		}
 		if err := am.keeper.PacketExecuted(ctx, packet, acknowledgement.GetBytes()); err != nil {
 			return nil, err
