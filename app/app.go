@@ -9,6 +9,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/chainapsis/astro-canvas/x/inter-staking"
 	"github.com/chainapsis/astro-canvas/x/interchain-account"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -72,6 +73,7 @@ var (
 		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		interchain_account.AppModuleBasic{},
+		inter_staking.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -83,6 +85,7 @@ var (
 		staking.NotBondedPoolName:       {auth.Burner, auth.Staking},
 		gov.ModuleName:                  {auth.Burner},
 		transfer.GetModuleAccountName(): {auth.Minter, auth.Burner},
+		inter_staking.ModuleName:        {auth.Minter, auth.Burner},
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -122,6 +125,7 @@ type AstroApp struct {
 	evidenceKeeper          evidence.Keeper
 	transferKeeper          transfer.Keeper
 	interchainAccountKeeper interchain_account.Keeper
+	interStakingKeeper      inter_staking.Keeper
 
 	// make scoped keepers public for test purposes
 	scopedIBCKeeper      capability.ScopedKeeper
@@ -150,7 +154,7 @@ func NewAstroApp(
 		mint.StoreKey, distr.StoreKey, slashing.StoreKey,
 		gov.StoreKey, params.StoreKey, ibc.StoreKey, upgrade.StoreKey,
 		evidence.StoreKey, transfer.StoreKey, capability.StoreKey,
-		interchain_account.StoreKey,
+		interchain_account.StoreKey, inter_staking.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capability.MemStoreKey)
@@ -263,6 +267,8 @@ func NewAstroApp(
 	evidenceKeeper.SetRouter(evidenceRouter)
 	app.evidenceKeeper = *evidenceKeeper
 
+	app.interStakingKeeper = inter_staking.NewKeeper(appCodec, keys[inter_staking.StoreKey], app.transferKeeper, app.interchainAccountKeeper, app.accountKeeper, app.bankKeeper)
+
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
 	app.mm = module.NewManager(
@@ -281,6 +287,8 @@ func NewAstroApp(
 		ibc.NewAppModule(app.ibcKeeper),
 		params.NewAppModule(app.paramsKeeper),
 		transferModule,
+		interchain_account.NewAppModule(app.interchainAccountKeeper),
+		inter_staking.NewAppModule(appCodec, app.interStakingKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -301,6 +309,7 @@ func NewAstroApp(
 		capability.ModuleName, auth.ModuleName, distr.ModuleName, staking.ModuleName, bank.ModuleName,
 		slashing.ModuleName, gov.ModuleName, mint.ModuleName, crisis.ModuleName,
 		ibc.ModuleName, genutil.ModuleName, evidence.ModuleName, transfer.ModuleName,
+		interchain_account.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)

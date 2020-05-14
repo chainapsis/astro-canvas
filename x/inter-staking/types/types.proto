@@ -1,0 +1,55 @@
+syntax = "proto3";
+package astro_canvas.x.interstaking.v1;
+
+option go_package = "github.com/chainapsis/astro-canvas/x/inter-staking/types";
+
+import "third_party/proto/gogoproto/gogo.proto";
+import "types/types.proto";
+
+message MsgRegister {
+    // the port on which the packet will be sent
+    string source_port = 1 [
+        (gogoproto.moretags) = "yaml:\"source_port\""
+    ];
+    // the channel by which the packet will be sent
+    string source_channel = 2 [
+        (gogoproto.moretags) = "yaml:\"source_channel\""
+    ];
+    bytes sender = 3 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"
+    ];
+}
+
+message MsgDelegate {
+    option (gogoproto.equal) = true;
+
+    // the port on which the packet will be sent
+    string transfer_source_port = 1 [
+        (gogoproto.moretags) = "yaml:\"transfer_source_port\""
+    ];
+    // the channel by which the packet will be sent
+    string transfer_source_channel = 2 [
+        (gogoproto.moretags) = "yaml:\"transfer_source_channel\""
+    ];
+
+    string interchain_account_source_port = 3 [
+        (gogoproto.moretags) = "yaml:\"interchain_account_source_port\""
+    ];
+    string interchain_account_source_channel = 4 [
+        (gogoproto.moretags) = "yaml:\"interchain_account_source_channel\""
+    ];
+
+    string counterparty_bech32_addr = 5 [
+        (gogoproto.moretags) = "yaml:\"counterparty_bech32_addr\""
+    ];
+
+    bytes delegator_address = 6 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+        (gogoproto.moretags) = "yaml:\"delegator_address\""
+    ];
+    bytes validator_address = 7 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.ValAddress",
+        (gogoproto.moretags) = "yaml:\"validator_address\""
+    ];
+    cosmos_sdk.v1.Coin amount = 8 [(gogoproto.nullable) = false];
+}
