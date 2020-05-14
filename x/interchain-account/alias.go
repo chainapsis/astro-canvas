@@ -7,12 +7,14 @@ import (
 
 const (
 	ModuleName   = types.ModuleName
+	StoreKey     = types.StoreKey
 	RouterKey    = types.RouterKey
 	QuerierRoute = types.QuerierRoute
 )
 
 var (
 	RegisterCodec = types.RegisterCodec
+	NewKeeper     = keeper.NewKeeper
 )
 
 type (

@@ -31,11 +31,11 @@ type Keeper struct {
 	storeKey sdk.StoreKey
 	cdc      codec.Marshaler
 
-	txCdc codec.Codec
+	txCdc *codec.Codec
 	// This field us used to marshal transaction for counterparty chain.
 	// Currently, we support only one counterparty chain per interchain account keeper.
 	// TODO: support multiple counterparty codec.
-	counterpartyTxCdc codec.Codec
+	counterpartyTxCdc *codec.Codec
 
 	channelKeeper types.ChannelKeeper
 	portKeeper    types.PortKeeper
@@ -49,7 +49,7 @@ type Keeper struct {
 // NewKeeper creates a new IBC transfer Keeper instance
 func NewKeeper(
 	cdc codec.Marshaler, key sdk.StoreKey,
-	txCdc, counterpartyTxCdc codec.Codec, channelKeeper types.ChannelKeeper, portKeeper types.PortKeeper,
+	txCdc, counterpartyTxCdc *codec.Codec, channelKeeper types.ChannelKeeper, portKeeper types.PortKeeper,
 	accountKeeper types.AccountKeeper, scopedKeeper capability.ScopedKeeper, router types.Router,
 ) Keeper {
 	return Keeper{
