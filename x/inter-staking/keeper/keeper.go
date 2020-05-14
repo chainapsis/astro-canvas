@@ -139,7 +139,7 @@ func (keeper Keeper) Delegate(ctx sdk.Context, counterpartyBech32Addr string, de
 	prefixDenom := transfertypes.GetDenomPrefix(transferSourcePort, transferSourceChannel)
 	amount = sdk.NewCoin(strings.Replace(amount.Denom, prefixDenom, "", 1), amount.Amount)
 
-	err = keeper.interchainAccountKeeper.RequestRunTx(ctx, iaSourcePort, iaSourceChannel, iatypes.CosmosSdkChainType, staking.NewMsgDelegate(delAddr, valAddr, amount))
+	err = keeper.interchainAccountKeeper.RequestRunTx(ctx, iaSourcePort, iaSourceChannel, iatypes.CosmosSdkChainType, staking.NewMsgDelegate(iaAccount, valAddr, amount))
 	if err != nil {
 		return err
 	}
