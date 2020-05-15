@@ -1,0 +1,66 @@
+syntax = "proto3";
+package astro_canvas.x.canvas.v1;
+
+import "third_party/proto/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "types/types.proto";
+
+option go_package = "github.com/chainapsis/astro-canvas/x/canvas/types";
+
+message MsgCreateCanvas {
+    string id = 1;
+    uint64 width = 2;
+    uint64 height = 3;
+    google.protobuf.Duration refund_duration = 4 [
+        (gogoproto.nullable)    = false,
+        (gogoproto.stdduration) = true,
+        (gogoproto.moretags)    = "yaml:\"refund_duration\""
+     ];
+    string allowDenomPrefix = 5;
+    uint64 priceForPoint = 6;
+
+    bytes sender = 7 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+        (gogoproto.moretags) = "yaml:\"sender\""
+    ];
+}
+
+message MsgPaint {
+    string id = 1;
+    uint64 x = 2;
+    uint64 y = 3;
+    cosmos_sdk.v1.Coin amount = 4 [(gogoproto.nullable) = false];
+    bytes sender = 5 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+        (gogoproto.moretags) = "yaml:\"sender\""
+    ];
+}
+
+message Canvas {
+    string id = 1;
+    uint64 width = 2;
+    uint64 height = 3;
+    google.protobuf.Duration refund_duration = 4 [
+        (gogoproto.nullable)    = false,
+        (gogoproto.stdduration) = true,
+        (gogoproto.moretags)    = "yaml:\"refund_duration\""
+    ];
+    string allowDenomPrefix = 5;
+    uint64 priceForPoint = 6;
+}
+
+message Point {
+    uint64 x = 1;
+    uint64 y = 2;
+    string color = 3;
+}
+
+message RefundData {
+    bytes recipient = 1 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+        (gogoproto.moretags) = "yaml:\"sender\""
+    ];
+    cosmos_sdk.v1.Coin amount = 2 [(gogoproto.nullable) = false];
+    google.protobuf.Timestamp refundTime = 3;
+}

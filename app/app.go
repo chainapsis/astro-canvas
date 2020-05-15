@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/chainapsis/astro-canvas/x/canvas"
 	"io"
 	"os"
 
@@ -74,6 +75,7 @@ var (
 		transfer.AppModuleBasic{},
 		interchain_account.AppModuleBasic{},
 		inter_staking.AppModuleBasic{},
+		canvas.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -86,6 +88,7 @@ var (
 		gov.ModuleName:                  {auth.Burner},
 		transfer.GetModuleAccountName(): {auth.Minter, auth.Burner},
 		inter_staking.ModuleName:        {auth.Minter, auth.Burner},
+		canvas.ModuleName:               nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -126,6 +129,7 @@ type AstroApp struct {
 	transferKeeper          transfer.Keeper
 	interchainAccountKeeper interchain_account.Keeper
 	interStakingKeeper      inter_staking.Keeper
+	canvasKeeper            canvas.Keeper
 
 	// make scoped keepers public for test purposes
 	scopedIBCKeeper      capability.ScopedKeeper
@@ -154,7 +158,7 @@ func NewAstroApp(
 		mint.StoreKey, distr.StoreKey, slashing.StoreKey,
 		gov.StoreKey, params.StoreKey, ibc.StoreKey, upgrade.StoreKey,
 		evidence.StoreKey, transfer.StoreKey, capability.StoreKey,
-		interchain_account.StoreKey, inter_staking.StoreKey,
+		interchain_account.StoreKey, inter_staking.StoreKey, canvas.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capability.MemStoreKey)
@@ -268,6 +272,7 @@ func NewAstroApp(
 	app.evidenceKeeper = *evidenceKeeper
 
 	app.interStakingKeeper = inter_staking.NewKeeper(appCodec, keys[inter_staking.StoreKey], app.transferKeeper, app.interchainAccountKeeper, app.accountKeeper, app.bankKeeper)
+	app.canvasKeeper = canvas.NewKeeper(appCodec, keys[canvas.StoreKey], app.accountKeeper, app.bankKeeper)
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
@@ -289,6 +294,7 @@ func NewAstroApp(
 		transferModule,
 		interchain_account.NewAppModule(app.interchainAccountKeeper),
 		inter_staking.NewAppModule(appCodec, app.interStakingKeeper),
+		canvas.NewAppModule(appCodec, app.canvasKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -296,7 +302,7 @@ func NewAstroApp(
 	// CanWithdrawInvariant invariant.
 	app.mm.SetOrderBeginBlockers(
 		upgrade.ModuleName, mint.ModuleName, distr.ModuleName, slashing.ModuleName,
-		evidence.ModuleName, staking.ModuleName, ibc.ModuleName,
+		evidence.ModuleName, staking.ModuleName, ibc.ModuleName, canvas.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(crisis.ModuleName, gov.ModuleName, staking.ModuleName)
 
@@ -309,7 +315,7 @@ func NewAstroApp(
 		capability.ModuleName, auth.ModuleName, distr.ModuleName, staking.ModuleName, bank.ModuleName,
 		slashing.ModuleName, gov.ModuleName, mint.ModuleName, crisis.ModuleName,
 		ibc.ModuleName, genutil.ModuleName, evidence.ModuleName, transfer.ModuleName,
-		interchain_account.ModuleName,
+		interchain_account.ModuleName, canvas.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)
