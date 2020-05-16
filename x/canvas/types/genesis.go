@@ -1,10 +1,7 @@
 package types
 
 import (
-	"encoding/json"
 	"time"
-
-	"github.com/cosmos/cosmos-sdk/codec"
 )
 
 type GenesisState struct {

@@ -3,7 +3,6 @@ package astro_canvas.x.canvas.v1;
 
 import "third_party/proto/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
-import "google/protobuf/timestamp.proto";
 import "types/types.proto";
 
 option go_package = "github.com/chainapsis/astro-canvas/x/canvas/types";
@@ -62,5 +61,5 @@ message RefundData {
         (gogoproto.moretags) = "yaml:\"sender\""
     ];
     cosmos_sdk.v1.Coin amount = 2 [(gogoproto.nullable) = false];
-    google.protobuf.Timestamp refundTime = 3;
+    int64 refundTime = 3;
 }

@@ -12,8 +12,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 
 	"github.com/chainapsis/astro-canvas/x/canvas/types"
-
-	"github.com/golang/protobuf/ptypes"
 )
 
 type Keeper struct {
@@ -102,15 +100,12 @@ func (keeper Keeper) Paint(ctx sdk.Context, id string, x uint64, y uint64, amoun
 		return types.ErrInvalidAmount
 	}
 
-	refundTime, err := ptypes.TimestampProto(ctx.BlockTime().Add(canvas.RefundDuration))
-	if err != nil {
-		return err
-	}
+	refundTime := ctx.BlockTime().Add(canvas.RefundDuration)
 
 	refundData := types.RefundData{
 		Recipient:  sender,
 		Amount:     amount,
-		RefundTime: refundTime,
+		RefundTime: refundTime.Unix(),
 	}
 
 	bz, err := keeper.cdc.MarshalBinaryBare(&refundData)
@@ -202,13 +197,10 @@ func (keeper Keeper) Refund(ctx sdk.Context) error {
 	}
 
 	for _, refundData := range refundDatas {
-		refundTime, err := ptypes.Timestamp(refundData.RefundTime)
-		if err != nil {
-			return err
-		}
+		refundTime := time.Unix(refundData.RefundTime, 0)
 
 		if refundTime.After(ctx.BlockTime()) {
-			err = keeper.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, refundData.Recipient, sdk.Coins{refundData.Amount})
+			err := keeper.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, refundData.Recipient, sdk.Coins{refundData.Amount})
 			if err != nil {
 				return err
 			}
