@@ -11,6 +11,8 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/chainapsis/astro-canvas/x/inter-staking/client/cli"
+	"github.com/chainapsis/astro-canvas/x/inter-staking/client/rest"
+	"github.com/chainapsis/astro-canvas/x/inter-staking/keeper"
 )
 
 var (
@@ -39,7 +41,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, bz json.RawMessag
 }
 
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	// noop
+	rest.RegisterRoutes(ctx, rtr)
 }
 
 func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
@@ -86,7 +88,7 @@ func (AppModule) QuerierRoute() string {
 }
 
 func (am AppModule) NewQuerierHandler() sdk.Querier {
-	return nil
+	return keeper.NewQuerier(am.keeper)
 }
 
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data json.RawMessage) []abci.ValidatorUpdate {
