@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/binary"
 	"fmt"
 	"strings"
 	"time"
@@ -116,7 +117,9 @@ func (keeper Keeper) Paint(ctx sdk.Context, id string, x uint64, y uint64, amoun
 	kvStore := ctx.KVStore(keeper.storeKey)
 	prefixStore := prefix.NewStore(kvStore, []byte("refund/"))
 
-	prefixStore.Set(ctx.TxBytes(), bz)
+	refundDataKey := make([]byte, binary.MaxVarintLen64)
+	binary.PutUvarint(refundDataKey, keeper.getIncrementalSequence(ctx))
+	prefixStore.Set(refundDataKey, bz)
 
 	err = keeper.bankKeeper.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, sdk.Coins{amount})
 	if err != nil {
@@ -210,4 +213,26 @@ func (keeper Keeper) Refund(ctx sdk.Context) error {
 	}
 
 	return nil
+}
+
+func (keeper Keeper) getIncrementalSequence(ctx sdk.Context) uint64 {
+	kvStore := ctx.KVStore(keeper.storeKey)
+	prefixStore := prefix.NewStore(kvStore, []byte("seq/"))
+
+	bz := prefixStore.Get([]byte("seq"))
+	if len(bz) == 0 {
+		buf := make([]byte, binary.MaxVarintLen64)
+		binary.PutUvarint(buf, 1)
+		prefixStore.Set([]byte("seq"), buf)
+
+		return 0
+	}
+
+	seq, _ := binary.Uvarint(bz)
+
+	buf := make([]byte, binary.MaxVarintLen64)
+	binary.PutUvarint(buf, seq+1)
+	prefixStore.Set([]byte("seq"), buf)
+
+	return seq
 }

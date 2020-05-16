@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"encoding/hex"
+	"encoding/binary"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -74,8 +74,8 @@ func (keeper Keeper) RegisterInterchainAccount(ctx sdk.Context, sender sdk.AccAd
 	// Use the block height as random seed to produce random number.
 	r := rand.New(rand.NewSource(ctx.BlockHeight()))
 
-	randInt := r.Int63()
-	salt := strconv.FormatInt(randInt, 10) + hex.EncodeToString(ctx.TxBytes())
+	randInt := r.Uint64()
+	salt := strconv.FormatUint(randInt+keeper.getIncrementalSequence(ctx), 10)
 	err := keeper.interchainAccountKeeper.CreateInterchainAccount(ctx, sourcePort, sourceChannel, salt)
 	if err != nil {
 		return err
@@ -158,4 +158,26 @@ func (keeper Keeper) Delegate(ctx sdk.Context, counterpartyBech32Addr string, de
 	}
 
 	return nil
+}
+
+func (keeper Keeper) getIncrementalSequence(ctx sdk.Context) uint64 {
+	kvStore := ctx.KVStore(keeper.storeKey)
+	prefixStore := prefix.NewStore(kvStore, []byte("seq/"))
+
+	bz := prefixStore.Get([]byte("seq"))
+	if len(bz) == 0 {
+		buf := make([]byte, binary.MaxVarintLen64)
+		binary.PutUvarint(buf, 1)
+		prefixStore.Set([]byte("seq"), buf)
+
+		return 0
+	}
+
+	seq, _ := binary.Uvarint(bz)
+
+	buf := make([]byte, binary.MaxVarintLen64)
+	binary.PutUvarint(buf, seq+1)
+	prefixStore.Set([]byte("seq"), buf)
+
+	return seq
 }
