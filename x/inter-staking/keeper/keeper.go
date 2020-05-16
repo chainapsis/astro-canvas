@@ -131,7 +131,7 @@ func (keeper Keeper) Delegate(ctx sdk.Context, counterpartyBech32Addr string, de
 		return err
 	}
 
-	err = keeper.transferKeeper.SendTransfer(ctx, transferSourcePort, transferSourceChannel, math.MaxUint64, sdk.Coins{amount}, delAddr, recipient)
+	err = keeper.transferKeeper.SendTransfer(ctx, transferSourcePort, transferSourceChannel, math.MaxUint64-transfer.DefaultPacketTimeoutHeight, sdk.Coins{amount}, delAddr, recipient)
 	if err != nil {
 		return err
 	}
