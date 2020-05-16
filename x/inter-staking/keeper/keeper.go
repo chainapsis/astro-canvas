@@ -146,7 +146,7 @@ func (keeper Keeper) Delegate(ctx sdk.Context, counterpartyBech32Addr string, de
 	}
 
 	bz := valAddr.Bytes()
-	mint := sdk.Coins{sdk.NewCoin(fmt.Sprintf("%s/%s/stake/%s", iaSourcePort, iaSourceChannel, hex.EncodeToString(bz[0:4])), amount.Amount)}
+	mint := sdk.Coins{sdk.NewCoin(fmt.Sprintf("%s/%s/%s/stake", iaSourcePort, iaSourceChannel, hex.EncodeToString(bz[0:4])), amount.Amount)}
 	// Mint coin as the proof of staking
 	err = keeper.bankKeeper.MintCoins(ctx, types.ModuleName, mint)
 	if err != nil {
