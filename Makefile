@@ -43,3 +43,6 @@ protoc-gen-gocosmos:
 proto-gen:
 	@./scripts/protocgen.sh
 
+install: go.sum
+	go install ./cmd/astrod
+	go install ./cmd/astrocli
