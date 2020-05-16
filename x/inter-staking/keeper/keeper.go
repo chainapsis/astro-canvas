@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -144,7 +145,8 @@ func (keeper Keeper) Delegate(ctx sdk.Context, counterpartyBech32Addr string, de
 		return err
 	}
 
-	mint := sdk.Coins{sdk.NewCoin(fmt.Sprintf("%s/%s/stake/%s", iaSourcePort, iaSourceChannel, valAddr.String()), amount.Amount)}
+	bz := valAddr.Bytes()
+	mint := sdk.Coins{sdk.NewCoin(fmt.Sprintf("%s/%s/stake/%s", iaSourcePort, iaSourceChannel, hex.EncodeToString(bz[0:4])), amount.Amount)}
 	// Mint coin as the proof of staking
 	err = keeper.bankKeeper.MintCoins(ctx, types.ModuleName, mint)
 	if err != nil {
