@@ -199,7 +199,7 @@ func (keeper Keeper) Refund(ctx sdk.Context) error {
 	for _, refundData := range refundDatas {
 		refundTime := time.Unix(refundData.RefundTime, 0)
 
-		if refundTime.After(ctx.BlockTime()) {
+		if ctx.BlockTime().After(refundTime) {
 			err := keeper.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, refundData.Recipient, sdk.Coins{refundData.Amount})
 			if err != nil {
 				return err
