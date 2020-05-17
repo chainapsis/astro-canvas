@@ -46,3 +46,7 @@ proto-gen:
 install: go.sum
 	go install ./cmd/astrod
 	go install ./cmd/astrocli
+
+build-linux-amd64: go.sum
+	env GOOS=linux GOARCH=amd64 go build -o ./build/astrod ./cmd/astrod
+	env GOOS=linux GOARCH=amd64 go build -o ./build/astrocli ./cmd/astrocli
