@@ -1,8 +1,9 @@
 # ✨🎨 AstroCanvas ✨🎨
 
-Frontend repository: [astro-canvas-frontend](https://github.com/chainapsis/astro-canvas-frontend)  
-Custom Keplr extension for hackathon (preliminary IBC support): [Keplr-extension](https://github.com/chainapsis/keplr-extension/tree/hackaton) [Release](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon)  
-Website: [hackathon.keplr.app](https://hackathon.keplr.app/)  
+##### Repositories
+* Frontend repository: [astro-canvas-frontend](https://github.com/chainapsis/astro-canvas-frontend)
+* Custom Keplr extension for hackathon (preliminary IBC support): [Keplr-extension](https://github.com/chainapsis/keplr-extension/tree/hackaton) [Release](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon)  
+* Website: [hackathon.keplr.app](https://hackathon.keplr.app/)  
 
 ### Decentralize Staking, Colorfully 🌈
 
@@ -18,33 +19,37 @@ While ideas such as variable staking reward rate, variable slashing rate, and mo
 
 ### Paint the picture of how you want **your** Cosmos to looks like
 
-> So what if we could incentivize stake decentralization without changing the fundamentals of the blockchain cryptoeconomics, by using  **personal amusement**?
+> So what if we could incentivize stake decentralization without changing the fundamentals of the blockchain cryptoeconomics, by using  **personal entertainment**?
 
 Astrocanvas is a game and a radical social experimentation in stake decentralization. We use elements of entertainment, scarcity, competition, and economics to incentivize voting power distribution of a proof-of-stake blockchain.
 
 ![place-reddit](img/place-reddit.png)
 
-We were inspired by the 2017 Reddit april fools project 'Place'. Where each account was allowed to change the color of one pixel on a 1000x1000 pixel canvas–**but only every 5 minutes**. In just 72 hours, over 1 million users participated. During that time, factions were formed, betrayals happened, virtual wars were fought, and ultimately a picture was drawn that represented the community of people that drew it. Place was an experimentation of digital scarcity, human psychology, and competition.
+We were inspired by the 2017 Reddit april fools project '/r/Place'. Where each account was allowed to change the color of one pixel on a 1000x1000 pixel canvas–**but only every 5 minutes**. In just 72 hours, over 1 million users participated. During that time, factions were formed, betrayals happened, virtual wars were fought, and ultimately a picture was drawn that represented the community of people that drew it. Place was an experimentation of digital scarcity, human psychology, and competition.
 
-In Astrocanvas, delegators are given specific `colorToken` that represents the right to change one pixel in the canvas when they delegate their staking token to a Hub validator. 
+In Astrocanvas, we take the experimentation to /r/place one step further and apply it to solving staking centralization of proof-of-stake blockchains.
+
+Delegators are given specific `colorToken` that represents the right to change one pixel in the canvas when they delegate their staking token to a Hub validator. 
 
 The catch? **Not all `colorToken` are the same.**
 
 Delegators can earn `colorToken` of a specific color (white, black, red, etc) depending on the voting power of the delegated validator. So for example, validator with *#1 to #10* rank in voting power gives delegators `colorTokenWhite` which only allows you to place a white pixel on the canvas. If you want to place a blue pixel, you need `colorTokenBlue` which you may only receive when you delegate to a validator with voting power ranging from *#80 to #90*.
 
 The idea here is as following:
-* People want to draw specific 'art' on the canvas, which would require a wide set of colors to do. Which will disincentivize staking to a high voting power validator in order to acquire other colors.
+* People want to draw specific 'art' on the canvas, which would require a wide set of colors to do. Which will disincentivize staking to a high voting power validator in order to acquire a diver palette of colors.
 * The picture drawn on the canvas, and the dominance of a specific color will accurately reflect the community of delegators and the state of the hub.
 * Validators will incentivize drawing of specific images that are dominant in the color of their respective `colorToken` in order to bring in delegations.
 * Potentially many factions and sub-communities will form in order to own a piece of the digitally scarce, immutable, decentralized canvas.
+* Implement an stake decentralization approach that doesn't solely rely on economic value, but also subjective value such as entertainment and social groups.
 
 ### A few quirks and features
 
 * The `colorToken` is burnt when it's used to change the pixel on the Astrocanvas
+* Your `colorTokens` regenerate after 5 minutes
 * The amount of `colorToken`s you receive is relative to the amount you stake
-* You receive new `colorToken`s every `n` blocks
-* You can only use `colorToken`s every `n` blocks
-* More in progress...
+* While we initially intended for colors to be assigned to validator ranks, we've went with assigning colors to validators due to time constraints
+* The transaction itself contains the metadata of the (x,y) coordinates and the token being used to draw. (Check out the JSON of the Keplr transaction!) **Essentially, Astro Zone blockchain is a state of the canvas. Changing the pixels on the canvas requires a transactions which cause a state transitions of the Astro Zone/Canvas.**
+* We wanted to implement a `colorToken` marketplace by adding a DEX/Uniswap module that allows people to buy + sell `colorTokens` for additional economic incentives, but didn't have sufficient time to work on that.
 
 ### How we built it
 
