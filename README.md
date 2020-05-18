@@ -24,6 +24,7 @@ While ideas such as variable staking reward rate, variable slashing rate, and mo
 Astrocanvas is a game and a radical social experimentation in stake decentralization. We use elements of entertainment, scarcity, competition, and economics to incentivize voting power distribution of a proof-of-stake blockchain.
 
 ![place-reddit](img/place-reddit.png)
+
 **[Link to Timelapse](https://www.youtube.com/watch?reload=9&v=XnRCZK3KjUY)**
 
 We were inspired by the 2017 Reddit april fools project '/r/Place'. Where each account was allowed to change the color of one pixel on a 1000x1000 pixel canvas–**but only every 5 minutes**. In just 72 hours, over 1 million users participated. During that time, factions were formed, betrayals happened, virtual wars were fought, and ultimately a picture was drawn that represented the community of people that drew it. Place was an experimentation of digital scarcity, human psychology, and competition.
