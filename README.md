@@ -36,7 +36,7 @@ The idea here is as following:
 * People want to draw specific 'art' on the canvas, which would require a wide set of colors to do. Which will disincentivize staking to a high voting power validator in order to acquire other colors.
 * The picture drawn on the canvas, and the dominance of a specific color will accurately reflect the community of delegators and the state of the hub.
 * Validators will incentivize drawing of specific images that are dominant in the color of their respective `colorToken` in order to bring in delegations.
-* Potentially many factions and sub-communities will form in order to own a piece of the digitally scarce canvas.
+* Potentially many factions and sub-communities will form in order to own a piece of the digitally scarce, immutable, decentralized canvas.
 
 ### A few quirks and features
 
@@ -46,8 +46,20 @@ The idea here is as following:
 * You can only use `colorToken`s every `n` blocks
 * More in progress...
 
-### The tools we used
+### How we built it
 
-We have used an early implementation of ICS27(Interchain Accounts) for interchain staking and implemented IBC cross-chain token transfers.
+We have used an early implementation of [ICS27(Interchain Accounts)](https://github.com/cosmos/ics/tree/master/spec/ics-027-interchain-accounts) for interchain staking to support staking to another chain. In the current implementation, the interchain staking module allows the foreign chain to mint the representative color tokens that include information such as the source port, source channel, validator address once the staking is successful.
 
-The AstroCanvas zone is built using a modified Cosmos-SDK, and records the state of the canvas (and each of the pixels) on the ledgers.
+The AstroCanvas zone is built using a modified Cosmos-SDK, and records the state of the canvas (and each of the pixels) on the ledgers. The canvas module manages the canvas and the specific pixels of the canvas. Any user can create the canvas with the canvas id, x-coordinate, y-coordinate, allowed denoms, etc. Users can point to a specific canvas id by using the assets that the canvas permissions. The front-end draws the denoms that exist on the canvas, and assigns specific colors for the on-chain information. Our current implementation works on the optimistic assumption that 'all IBC packets will succeed' as the current relayer implementation has limitations in sending acknoledgements packets--and we didn't have time to revise the code for that part.
+
+## How to use AstroCanvas
+
+1. Install [Keplr IBC (Hackathon Release)](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon)
+
+2. Open Chrome and click on the menu bar. Go to 'More tools' -> 'Extensions'
+
+3. Turn on 'Developer Mode'
+
+4. Extract file from Step 1
+
+5. 
