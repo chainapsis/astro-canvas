@@ -41,6 +41,7 @@ The idea here is as following:
 * Validators will incentivize drawing of specific images that are dominant in the color of their respective `colorToken` in order to bring in delegations.
 * Potentially many factions and sub-communities will form in order to own a piece of the digitally scarce, immutable, decentralized canvas.
 * Implement an stake decentralization approach that doesn't solely rely on economic value, but also subjective value such as entertainment and social groups.
+* A network effect where the entertainment of competition, drawing, etc brings in more people--and the positive side effect being stake decentralization.
 
 ### A few quirks and features
 
