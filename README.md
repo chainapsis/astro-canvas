@@ -54,12 +54,26 @@ The AstroCanvas zone is built using a modified Cosmos-SDK, and records the state
 
 ## How to use AstroCanvas
 
-1. Install [Keplr IBC (Hackathon Release)](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon)
+**How to install Keplr IBC**
 
-2. Open Chrome and click on the menu bar. Go to 'More tools' -> 'Extensions'
+1. Download [Keplr IBC (Hackathon Release)](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon) and unzip/extract the files
 
-3. Turn on 'Developer Mode'
+2. Open Chrome and click on the menu bar (the three dots on the top right corner of the browser). Go to 'More tools' -> 'Extensions'
 
-4. Extract file from Step 1
+3. Turn 'Developer Mode' on (top right corner of the page)
 
-5. 
+4. Click on 'Load Unpacked', and choose the Keplr IBC folder you downloaded in step 1.
+
+5. Open Keplr Extension and create/import an account.
+
+**How to use AstroCanvas**
+
+1. Get some tokens from the Astro Hub and Astro Zone faucet (50 tokens per 5 minutes)
+
+2. Send the Astro Hub tokens to Astro Zone via IBC send (Note: Astro Hub token is the staking token that's used to generate the `colorTokens` from within the Astro Zone. Astro Zone's tokens are only used as gas tokens)
+
+3. Go to [hackathon.keplr.app](https://hackathon.keplr.app) and click on 'Register'
+
+4. Delegate to validators and receive specific `colorTokens` __(Note: Your color token balance regenerate every 5 mins. i.e. if you have spent all 50 `whiteTokens` that you initially received, your `whiteTokens` be 50 again after 5 minutes since you've last used the `whiteToken` on the canvas)__
+
+5. Place pixels on the canvas, and create your drawing! (We suggest you don't place more than 30 pixels at a time as too many pixels can cause issues with transactions failing)
