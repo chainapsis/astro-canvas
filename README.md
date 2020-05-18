@@ -1,4 +1,9 @@
 # ✨🎨 AstroCanvas ✨🎨
+
+Frontend repository: [astro-canvas-frontend](https://github.com/chainapsis/astro-canvas-frontend)  
+Custom Keplr extension for hackathon (preliminary IBC support): [Keplr-extension](https://github.com/chainapsis/keplr-extension/tree/hackaton) [Release](https://github.com/chainapsis/keplr-extension/releases/tag/v0.6.0-hackathon)  
+Website: [hackathon.keplr.app](https://hackathon.keplr.app/)  
+
 ### Decentralize Staking, Colorfully 🌈
 
 ### Introduction
